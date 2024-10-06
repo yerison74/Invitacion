@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formModal = document.getElementById('formModal');
     const rsvpForm = document.getElementById('rsvpForm');
     const confirmationModal = document.getElementById('confirmationModal');
-    const downloadButton = document.getElementById('downloadButton');
+    const shareButton = document.getElementById('shareButton');
 
     // Asegurarse de que el modal esté oculto inicialmente
     formModal.classList.add('hidden');
@@ -104,7 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Añadir elementos decorativos marinos
             drawSeaElements(ctx);
 
-            setDownloadButton(canvas);
+            // Configurar el botón de compartir
+            setShareButton(canvas);
         };
         img.src = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Victoia-jCgNN5PcX5J8hZWJ57jhINRBWs55uz.jpeg';
         img.crossOrigin = 'anonymous';
@@ -153,13 +154,40 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fill();
     }
 
-    function setDownloadButton(canvas) {
-        downloadButton.addEventListener('click', function() {
-            const dataURL = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = 'confirmacion_cumpleanos_victoria.png';
-            link.href = dataURL;
-            link.click();
+    function setShareButton(canvas) {
+        shareButton.addEventListener('click', function() {
+            canvas.toBlob(function(blob) {
+                const file = new File([blob], "confirmacion_cumpleanos_victoria.png", { type: "image/png" });
+                const filesArray = [file];
+                
+                if (navigator.canShare && navigator.canShare({ files: filesArray })) {
+                    navigator.share({
+                        files: filesArray,
+                        title: 'Confirmación de Asistencia',
+                        text: '¡He confirmado mi asistencia al cumpleaños de Victoria!'
+                    }).then(() => {
+                        console.log('Compartido exitosamente');
+                    }).catch((error) => {
+                        console.error('Error al compartir', error);
+                        fallbackToWhatsApp(canvas);
+                    });
+                } else {
+                    fallbackToWhatsApp(canvas);
+                }
+            });
+        });
+    }
+
+    function fallbackToWhatsApp(canvas) {
+        canvas.toBlob(function(blob) {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                const base64data = reader.result;
+                const message = encodeURIComponent("¡He confirmado mi asistencia al cumpleaños de Victoria!");
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                window.open(whatsappUrl, '_blank');
+            }
+            reader.readAsDataURL(blob);
         });
     }
 });
