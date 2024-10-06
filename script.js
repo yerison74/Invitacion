@@ -40,34 +40,117 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function generateConfirmationImage(name, lastName) {
         const canvas = document.createElement('canvas');
-        canvas.width = 600;
-        canvas.height = 400;
+        canvas.width = 800;
+        canvas.height = 600;
         const ctx = canvas.getContext('2d');
 
-        // Fondo
-        ctx.fillStyle = '#87CEEB';
+        // Fondo con degradado
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#87CEEB');
+        gradient.addColorStop(1, '#1E90FF');
+        ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Texto
+        // Burbujas decorativas
+        for (let i = 0; i < 50; i++) {
+            ctx.beginPath();
+            ctx.arc(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                Math.random() * 5 + 1,
+                0,
+                Math.PI * 2
+            );
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.fill();
+        }
+
+        // Título
         ctx.fillStyle = 'white';
-        ctx.font = 'bold 24px Arial';
+        ctx.font = 'bold 40px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Confirmación de Asistencia', canvas.width / 2, 50);
-        ctx.font = '20px Arial';
-        ctx.fillText(`${name} ${lastName}`, canvas.width / 2, 100);
-        ctx.fillText('confirma su asistencia al', canvas.width / 2, 130);
-        ctx.fillText('cumpleaños de Victoria', canvas.width / 2, 160);
-        ctx.fillText('Fecha: Miércoles 4 de Diciembre', canvas.width / 2, 220);
-        ctx.fillText('Hora: 4:00 PM', canvas.width / 2, 250);
+        ctx.fillText('Confirmación de Asistencia', canvas.width / 2, 80);
+
+        // Información del invitado
+        ctx.font = 'bold 30px Arial';
+        ctx.fillText(`${name} ${lastName}`, canvas.width / 2, 150);
+        ctx.font = '24px Arial';
+        ctx.fillText('confirma su asistencia al', canvas.width / 2, 190);
+        ctx.fillText('cumpleaños de Victoria', canvas.width / 2, 220);
+
+        // Detalles del evento
+        ctx.font = 'bold 28px Arial';
+        ctx.fillText('Fecha: Miércoles 4 de Diciembre', canvas.width / 2, 300);
+        ctx.fillText('Hora: 4:00 PM', canvas.width / 2, 340);
 
         // Agregar imagen de la invitación
         const img = new Image();
         img.onload = function() {
-            ctx.drawImage(img, 200, 280, 200, 100);
+            // Crear un marco para la imagen
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            
+            // Dibujar un rectángulo blanco como fondo de la imagen
+            ctx.fillStyle = 'white';
+            ctx.fillRect(250, 380, 300, 150);
+            
+            // Dibujar la imagen
+            ctx.drawImage(img, 260, 390, 280, 130);
+            ctx.restore();
+
+            // Añadir elementos decorativos marinos
+            drawSeaElements(ctx);
+
             setDownloadButton(canvas);
         };
         img.src = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Victoia-jCgNN5PcX5J8hZWJ57jhINRBWs55uz.jpeg';
         img.crossOrigin = 'anonymous';
+    }
+
+    function drawSeaElements(ctx) {
+        // Dibujar un pez
+        ctx.fillStyle = '#FF6347';
+        ctx.beginPath();
+        ctx.moveTo(100, 500);
+        ctx.quadraticCurveTo(150, 450, 200, 500);
+        ctx.quadraticCurveTo(150, 550, 100, 500);
+        ctx.fill();
+
+        // Ojo del pez
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(170, 500, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(170, 500, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Dibujar algas
+        ctx.strokeStyle = '#32CD32';
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 5; i++) {
+            ctx.beginPath();
+            ctx.moveTo(50 + i * 20, 600);
+            ctx.quadraticCurveTo(60 + i * 20, 550, 50 + i * 20, 500);
+            ctx.stroke();
+        }
+
+        // Dibujar una estrella de mar
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.moveTo(700, 500);
+        for (let i = 0; i < 5; i++) {
+            ctx.lineTo(700 + Math.cos((18 + i * 72) * Math.PI / 180) * 30,
+                       500 + Math.sin((18 + i * 72) * Math.PI / 180) * 30);
+            ctx.lineTo(700 + Math.cos((54 + i * 72) * Math.PI / 180) * 15,
+                       500 + Math.sin((54 + i * 72) * Math.PI / 180) * 15);
+        }
+        ctx.closePath();
+        ctx.fill();
     }
 
     function setDownloadButton(canvas) {
