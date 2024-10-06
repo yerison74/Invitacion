@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de Cumpleaños de Victoria</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="invitation">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Victoia-jCgNN5PcX5J8hZWJ57jhINRBWs55uz.jpeg" alt="Invitación de Cumpleaños de Victoria" class="invitation-image">
+            <div class="content">
+                <h1>¡Te esperamos!</h1>
+                <p>Ven a celebrar el cumpleaños de Victoria con nosotros. Habrá diversión, juegos y mucha alegría bajo el mar.</p>
+                <button id="rsvpButton">Confirmar Asistencia</button>
+                <p id="thankYouMessage" class="hidden">¡Gracias por confirmar tu asistencia!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="formModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Confirma tu asistencia</h2>
+            <form id="rsvpForm">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" required>
+                <label for="lastName">Apellido:</label>
+                <input type="text" id="lastName" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>¡Confirmación generada!</h2>
+            <p>Haz clic en el botón para descargar tu confirmación.</p>
+            <button id="downloadButton">Descargar Confirmación</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
