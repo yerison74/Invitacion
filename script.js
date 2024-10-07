@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.font = 'bold 28px Arial';
         ctx.fillText('Fecha: Miércoles 4 de Diciembre', canvas.width / 2, 300);
         ctx.fillText('Hora: 4:00 PM', canvas.width / 2, 340);
-
+        
         // Agregar imagen de la invitación
         const img = new Image();
         img.onload = function() {
